@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GuideHub | Discover Games, Guides and Community Content</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="home">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <div class="stars"></div>
+
+    <header class="site-header sticky-header">
+      <div class="shell header-shell">
+        <a class="brand" href="index.html">
+          <div class="brand-icon">
+            <img src="assets/images/guidehub-logo.png" alt="GuideHub logo" />
+          </div>
+          <div class="brand-text">
+            <h1>GUIDEHUB</h1>
+            <p>Game discovery, curated content and community publishing</p>
+          </div>
+        </a>
+
+        <nav class="main-nav main-nav-row">
+          <a href="index.html" class="nav-link active">Home</a>
+          <a href="#gamesSection" class="nav-link">Games</a>
+          <a href="#communitySection" class="nav-link">Community</a>
+          <a href="submit.html" class="nav-link" data-hub-link>Creator Hub</a>
+        </nav>
+
+        <div class="header-tools">
+          <div class="header-account">
+            <button id="accountButton" class="header-account-button">Cont</button>
+            <button id="logoutButton" class="header-account-button hidden" type="button">
+              Logout
+            </button>
+          </div>
+
+          <a class="header-cta" href="submit.html" data-hub-link data-dashboard-cta>
+            Submit content
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div id="loginModal" class="auth-modal hidden">
+      <div class="auth-modal-content">
+        <button id="closeLoginModal" class="close-modal-button" type="button">×</button>
+        <h2>Autentificare</h2>
+
+        <form id="loginForm" class="auth-form">
+          <input type="email" id="loginEmail" placeholder="Email" required />
+          <input type="password" id="loginPassword" placeholder="Parolă" required />
+          <button type="submit" class="primary-button">Login</button>
+        </form>
+
+        <p id="loginMessage"></p>
+        <a href="register.html">Nu ai cont? Înregistrează-te</a>
+      </div>
+    </div>
+
+    <main class="shell page page-home">
+      <section class="hero-panel hero-panel-compact">
+        <div class="hero-copy">
+          <span class="eyebrow">GuideHub prototype · community-driven platform</span>
+          <h3>One place for games, guides, reviews, redeem codes and live community submissions.</h3>
+          <p>
+            We are pushing GuideHub beyond a simple mockup into a fuller product concept:
+            game categories, role-based moderation, sticky navigation, offers, coupons and
+            a publication flow where users can submit guides and admins approve them.
+          </p>
+
+          <div class="hero-actions">
+            <a class="primary-btn" href="#gamesSection">Explore games</a>
+            <a class="secondary-btn" href="submit.html" data-hub-link data-dashboard-cta>
+              Submit content
+            </a>
+          </div>
+
+          <div class="hero-inline-cards">
+            <div class="info-card">
+              <p class="info-card-label">Current role</p>
+              <h3 data-current-role-name>Guest</h3>
+              <p data-current-role-text>Poate doar vizualiza conținutul public.</p>
+            </div>
+
+            <div class="info-card">
+              <p class="info-card-label">Admin flow</p>
+              <h3>Approve or reject</h3>
+              <p>User guides become visible only after moderation.</p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-side-card metrics-only-card">
+          <div class="info-chip-row">
+            <span class="info-chip">Local demo database</span>
+            <span class="info-chip">Role-based moderation</span>
+            <span class="info-chip">Coupon &amp; codes support</span>
+          </div>
+
+          <div class="hero-summary-grid" id="heroStats"></div>
+        </aside>
+      </section>
+
+      <section class="genre-section" id="gamesSection">
+        <div class="section-head">
+          <div>
+            <h2>Browse by game category</h2>
+            <p>
+              Home filters now focus on actual game genres instead of content types, while each
+              game page includes all guides, reviews, builds, codes and coupons.
+            </p>
+          </div>
+          <div class="live-indicator">
+            <span class="live-dot"></span>
+            <span>Persistent local demo data</span>
+          </div>
+        </div>
+
+        <div class="filters filters-genre" id="genreFilters"></div>
+
+        <div class="catalog-search-row">
+          <div class="search-box compact-search catalog-search-box">
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Search by title, genre or platform..."
+              aria-label="Search for a game"
+            />
+            <button id="searchBtn" type="button">Search</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="cards-grid cards-grid-large" id="cardsGrid"></section>
+
+      <p class="empty-state hidden" id="emptyState">No games matched your search.</p>
+
+      <section class="panel-grid home-info-grid">
+        <article class="glass-panel">
+          <div class="panel-head compact">
+            <h3>Latest approved articles</h3>
+            <span class="panel-meta">Visible after admin moderation</span>
+          </div>
+          <div id="latestArticles" class="feed-list"></div>
+        </article>
+
+        <article class="glass-panel" id="communitySection">
+          <div class="panel-head compact">
+            <h3>How publishing works</h3>
+            <span class="panel-meta">Simple moderation flow</span>
+          </div>
+
+          <div class="workflow-list">
+            <div class="workflow-item">
+              <span class="workflow-step">1</span>
+              <div>
+                <strong>Guest explores the platform</strong>
+                <p>Anyone can browse games and read public content without logging in.</p>
+              </div>
+            </div>
+
+            <div class="workflow-item">
+              <span class="workflow-step">2</span>
+              <div>
+                <strong>User logs in and submits content</strong>
+                <p>Authenticated users can propose guides, reviews or tips for moderation.</p>
+              </div>
+            </div>
+
+            <div class="workflow-item">
+              <span class="workflow-step">3</span>
+              <div>
+                <strong>Admin reviews submissions</strong>
+                <p>Approved content becomes public, while rejected content stays hidden.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-shell">
+        <div>
+          <h4>GuideHub</h4>
+          <p>
+            Prototype platform for curated gaming content, user submissions and moderated
+            publishing.
+          </p>
+        </div>
+
+        <div>
+          <h4>Pay for our coffee</h4>
+          <p><strong>IBAN demo: RO77 RNCB 0702 1656 5415 0001</strong></p>
+          <p class="footer-soft">Use this area later for donations, Patreon or creator support.</p>
+        </div>
+
+        <div>
+          <h4>Project note</h4>
+          <p>Built as a web prototype with SQLite, Flask API and role-based moderation.</p>
+          <p class="footer-soft">&copy; 2026 GuideHub. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

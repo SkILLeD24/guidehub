@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GuideHub | Game Details</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="game">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <div class="stars"></div>
+
+    <header class="site-header sticky-header">
+  <div class="shell header-shell">
+    <a class="brand" href="index.html">
+      <div class="brand-icon">
+        <img src="assets/images/guidehub-logo.png" alt="GuideHub logo" />
+      </div>
+      <div class="brand-text">
+        <h1>GUIDEHUB</h1>
+        <p>Game discovery, curated content and community publishing</p>
+      </div>
+    </a>
+
+    <nav class="main-nav main-nav-row">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="game.html" class="nav-link active">Overview</a>
+      <a href="#articlesSection" class="nav-link">Articles</a>
+      <a href="submit.html" class="nav-link" data-hub-link>Creator Hub</a>
+    </nav>
+
+    <div class="header-tools">
+      <div class="header-account">
+        <button id="accountButton" class="header-account-button">Cont</button>
+        <button id="logoutButton" class="header-account-button hidden">Logout</button>
+      </div>
+
+      <a class="header-cta" href="submit.html" data-hub-link data-dashboard-cta>
+        Submit content
+      </a>
+    </div>
+  </div>
+</header>
+
+<div id="loginModal" class="auth-modal hidden">
+  <div class="auth-modal-content">
+    <button id="closeLoginModal" class="close-modal-button" type="button">×</button>
+    <h2>Autentificare</h2>
+
+    <form id="loginForm" class="auth-form">
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Parolă" required />
+      <button type="submit" class="primary-button">Login</button>
+    </form>
+
+    <p id="loginMessage"></p>
+    <a href="register.html">Nu ai cont? Înregistrează-te</a>
+  </div>
+</div>
+
+    <main class="shell page page-game">
+      <section class="breadcrumb-row compact-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <span id="breadcrumbGame">Game</span>
+      </section>
+
+      <section class="game-hero upgraded-hero compact-game-hero">
+        <div class="game-hero-content compact-game-copy">
+          <span class="game-label" id="heroLabel">Featured Game</span>
+          <h2 id="gameTitle">Game title</h2>
+          <p id="gameDescription">Game description will appear here.</p>
+
+          <div class="hero-tags" id="heroTags"></div>
+
+          <div class="hero-quick-actions spaced-action-row">
+            <a class="primary-btn" href="#gameArticlesSection">Explore content</a>
+            <a class="secondary-btn" href="#gameCodesSection">View codes</a>
+          </div>
+        </div>
+
+        <div class="game-hero-art compact-hero-art">
+          <img id="heroImage" src="" alt="Game cover" />
+        </div>
+      </section>
+
+      <section class="game-layout upgraded-layout compact-game-layout">
+        <article class="content-panel content-panel-large">
+          <section class="content-block content-block-first" id="gameOverviewSection">
+            <div class="panel-head compact">
+              <h3>Overview</h3>
+              <span class="panel-meta" id="panelMeta">Live game profile</span>
+            </div>
+            <p id="overviewText"></p>
+          </section>
+
+          <section class="content-block">
+            <h4>Best early priorities</h4>
+            <ul id="prioritiesList"></ul>
+          </section>
+
+          <section class="content-block" id="gameArticlesSection">
+            <div class="panel-head compact">
+              <h3>Guides, reviews and builds</h3>
+              <span class="panel-meta">Approved content for this game</span>
+            </div>
+            <div class="article-type-filters" id="articleTypeFilters"></div>
+            <div class="article-list" id="gameArticleList"></div>
+          </section>
+
+          <section class="content-block" id="gameCodesSection">
+            <div class="panel-head compact">
+              <h3>Codes section</h3>
+              <span class="panel-meta">Redeemable codes and unlocks</span>
+            </div>
+            <div class="promo-grid" id="codesList"></div>
+          </section>
+
+          <section class="content-block" id="gameCouponsSection">
+            <div class="panel-head compact">
+              <h3>Discount coupons</h3>
+              <span class="panel-meta">Partner offers and shop deals</span>
+            </div>
+            <div class="promo-grid" id="couponsList"></div>
+          </section>
+        </article>
+
+        <aside class="sidebar-panel compact-sidebar-panel">
+          <div class="side-card">
+            <h4>Quick Info</h4>
+            <div class="quick-list" id="quickInfoList"></div>
+          </div>
+
+          <div class="side-card">
+            <h4>Role-based publishing</h4>
+            <p class="card-note" id="roleNote"></p>
+            <a href="submit.html" class="view-btn" data-hub-link data-dashboard-cta>Open Creator Hub</a>
+          </div>
+
+          <div class="side-card">
+            <h4>Sources</h4>
+            <div class="source-list" id="sourceList"></div>
+          </div>
+
+          <div class="side-card">
+            <h4>Community status</h4>
+            <div class="community-metrics" id="gameCommunityMetrics"></div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-shell">
+        <div>
+          <h4>GuideHub</h4>
+          <p>Structured game pages now gather all important content in one place.</p>
+        </div>
+        <div>
+          <h4>Pay for our coffee</h4>
+          <p>IBAN demo: <strong>RO77 RNCB 0702 1656 5415 0001</strong></p>
+        </div>
+        <div>
+          <h4>Copyright</h4>
+          <p class="footer-soft">&copy; 2026 GuideHub. Curated content prototype.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

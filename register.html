@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GuideHub - Register</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="auth-page">
+    <div class="auth-card">
+      <h1>Create account</h1>
+      <p>Fă-ți cont GuideHub.</p>
+
+      <form id="registerForm" class="auth-form">
+        <input type="text" id="registerUsername" placeholder="Username" required />
+        <input type="email" id="registerEmail" placeholder="Email" required />
+        <input type="password" id="registerPassword" placeholder="Parolă" required />
+        <input type="password" id="registerConfirmPassword" placeholder="Confirmă parola" required />
+        <button type="submit" class="primary-button">Register</button>
+      </form>
+
+      <p id="registerMessage"></p>
+      <a href="index.html">Înapoi la homepage</a>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

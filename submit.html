@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GuideHub | Submit for Moderation</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="submit">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <div class="stars"></div>
+
+    <header class="site-header sticky-header">
+  <div class="shell header-shell">
+    <a class="brand" href="index.html">
+      <div class="brand-icon">
+        <img src="assets/images/guidehub-logo.png" alt="GuideHub logo" />
+      </div>
+      <div class="brand-text">
+        <h1>GUIDEHUB</h1>
+        <p>Game discovery, curated content and community publishing</p>
+      </div>
+    </a>
+
+    <nav class="main-nav main-nav-row">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#gamesSection" class="nav-link">Games</a>
+      <a href="index.html#communitySection" class="nav-link">Community</a>
+      <a href="submit.html" class="nav-link active" data-hub-link>Creator Hub</a>
+    </nav>
+
+    <div class="header-tools">
+      <div class="header-account">
+        <button id="accountButton" class="header-account-button">Cont</button>
+        <button id="logoutButton" class="header-account-button hidden">Logout</button>
+      </div>
+
+      <a class="header-cta" href="submit.html" data-hub-link data-dashboard-cta>
+        Submit content
+      </a>
+    </div>
+  </div>
+</header>
+
+<div id="loginModal" class="auth-modal hidden">
+  <div class="auth-modal-content">
+    <button id="closeLoginModal" class="close-modal-button" type="button">×</button>
+    <h2>Autentificare</h2>
+
+    <form id="loginForm" class="auth-form">
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Parolă" required />
+      <button type="submit" class="primary-button">Login</button>
+    </form>
+
+    <p id="loginMessage"></p>
+    <a href="register.html">Nu ai cont? Înregistrează-te</a>
+  </div>
+</div>
+
+    <main class="shell page page-submit">
+      <section class="dashboard-hero compact-dashboard-hero submit-hero">
+        <div>
+          <span class="eyebrow">GuideHub community publishing</span>
+          <h2>Submit a new article for moderation</h2>
+          <p>
+            Regular users can propose a guide, review or build for an existing game. The article is
+            sent to the moderation queue and becomes public only after approval from the admin role.
+          </p>
+        </div>
+        <div class="dashboard-status">
+          <div class="status-pill" id="submitRolePill">Current role: user</div>
+          <div class="status-note" id="submitRoleDescription">Your content will be reviewed before publication.</div>
+        </div>
+      </section>
+
+      <section class="metrics-grid compact-metrics" id="submitMetrics"></section>
+      <section class="access-banner" id="submitBanner"></section>
+
+      <section class="admin-main-grid compact-admin-grid submit-main-grid" id="submitSection">
+        <section class="glass-panel">
+          <div class="panel-head compact">
+            <h3>Create article proposal</h3>
+            <span class="panel-meta">Everything submitted here goes through moderation</span>
+          </div>
+
+          <form id="articleForm" class="admin-form compact-admin-form">
+            <div class="form-grid compact-form-grid">
+              <div class="form-group">
+                <label for="title">Article title</label>
+                <input type="text" id="title" name="title" placeholder="Ex: Fast early route for Elden Ring" required />
+              </div>
+
+              <div class="form-group">
+                <label for="game">Game</label>
+                <select id="game" name="game" required></select>
+              </div>
+
+              <div class="form-group">
+                <label for="category">Content type</label>
+                <select id="category" name="category" required>
+                  <option value="">Choose type</option>
+                  <option value="guide">Guide</option>
+                  <option value="review">Review</option>
+                  <option value="build">Build</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="imageUrl">Image URL</label>
+                <input type="url" id="imageUrl" name="imageUrl" placeholder="Optional external image" />
+              </div>
+
+              <div class="form-group">
+                <label for="source">Main source</label>
+                <input type="url" id="source" name="source" placeholder="https://example.com/source" />
+              </div>
+
+              <div class="form-group">
+                <label for="priorityOne">Priority bullet 1</label>
+                <input type="text" id="priorityOne" name="priorityOne" placeholder="Ex: Upgrade your main weapon first" />
+              </div>
+
+              <div class="form-group">
+                <label for="priorityTwo">Priority bullet 2</label>
+                <input type="text" id="priorityTwo" name="priorityTwo" placeholder="Ex: Focus on survivability" />
+              </div>
+
+              <div class="form-group">
+                <label for="priorityThree">Priority bullet 3</label>
+                <input type="text" id="priorityThree" name="priorityThree" placeholder="Ex: Return later to difficult bosses" />
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="summary">Short summary</label>
+              <textarea id="summary" name="summary" rows="3" placeholder="Write a short teaser for the article..."></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="content">Main content / overview</label>
+              <textarea id="content" name="content" rows="7" placeholder="Write the main article overview here..." required></textarea>
+            </div>
+
+            <div class="admin-actions">
+              <button type="button" class="secondary-btn" id="previewBtn">Preview</button>
+              <button type="reset" class="secondary-btn">Reset</button>
+              <button type="submit" class="primary-btn">Send for moderation</button>
+            </div>
+          </form>
+
+          <p id="formMessage" class="form-message hidden"></p>
+        </section>
+
+        <aside class="admin-preview-panel">
+          <div class="side-card preview-card compact-preview-card">
+            <h3>Submission Preview</h3>
+            <div class="preview-image" id="previewImage"><span>No image</span></div>
+            <div class="preview-meta">
+              <span class="tag tag-guide" id="previewCategory">Type</span>
+              <span class="likes" id="previewAuthor">Pending review</span>
+            </div>
+            <h4 id="previewTitle">Article title will appear here</h4>
+            <p id="previewGame">Selected game</p>
+            <p id="previewSummary">Summary preview will appear here.</p>
+          </div>
+
+          <div class="side-card compact-side-card">
+            <h4>What happens next?</h4>
+            <ul class="admin-tips compact-tips">
+              <li>Your proposal enters the moderation queue immediately.</li>
+              <li>Giku can approve or reject the article from the admin dashboard.</li>
+              <li>Approved articles appear on the relevant game page.</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+
+      <section class="glass-panel compact-feed-panel" id="submissionFeedSection">
+        <div class="panel-head compact">
+          <h3>My recent submissions</h3>
+          <span class="panel-meta">Pending and recently approved content</span>
+        </div>
+        <div id="userSubmissionFeed" class="feed-list"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-shell">
+        <div>
+          <h4>GuideHub</h4>
+          <p>Community members can submit content while admins keep the public pages curated.</p>
+        </div>
+        <div>
+          <h4>Pay for our coffee</h4>
+          <p>IBAN demo: <strong>RO77 RNCB 0702 1656 5415 0001</strong></p>
+        </div>
+        <div>
+          <h4>Copyright</h4>
+          <p class="footer-soft">&copy; 2026 GuideHub. Community submission prototype.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GuideHub | Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="admin">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <div class="stars"></div>
+
+    <header class="site-header sticky-header">
+  <div class="shell header-shell">
+    <a class="brand" href="index.html">
+      <div class="brand-icon">
+        <img src="assets/images/guidehub-logo.png" alt="GuideHub logo" />
+      </div>
+      <div class="brand-text">
+        <h1>GUIDEHUB</h1>
+        <p>Game discovery, curated content and community publishing</p>
+      </div>
+    </a>
+
+    <nav class="main-nav main-nav-row">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#gamesSection" class="nav-link">Games</a>
+      <a href="index.html#communitySection" class="nav-link">Community</a>
+      <a href="admin.html" class="nav-link active" data-hub-link>Creator Hub</a>
+    </nav>
+
+    <div class="header-tools">
+      <div class="header-account">
+        <button id="accountButton" class="header-account-button">Cont</button>
+        <button id="logoutButton" class="header-account-button hidden">Logout</button>
+      </div>
+
+      <a class="header-cta" href="admin.html" data-hub-link data-dashboard-cta>
+        Open dashboard
+      </a>
+    </div>
+  </div>
+</header>
+
+<div id="loginModal" class="auth-modal hidden">
+  <div class="auth-modal-content">
+    <button id="closeLoginModal" class="close-modal-button" type="button">×</button>
+    <h2>Autentificare</h2>
+
+    <form id="loginForm" class="auth-form">
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Parolă" required />
+      <button type="submit" class="primary-button">Login</button>
+    </form>
+
+    <p id="loginMessage"></p>
+    <a href="register.html">Nu ai cont? Înregistrează-te</a>
+  </div>
+</div>
+
+    <main class="shell page page-admin">
+      <section class="dashboard-hero compact-dashboard-hero">
+        <div>
+          <span class="eyebrow">GuideHub control center</span>
+          <h2>Admin dashboard</h2>
+          <p>
+            This area is reserved for the admin role. From here you can publish content instantly,
+            moderate pending user submissions and add new games to the local demo database.
+          </p>
+        </div>
+        <div class="dashboard-status">
+          <div class="status-pill" id="adminRolePill">Current role: admin</div>
+          <div class="status-note" id="adminRoleDescription">Admin mode active.</div>
+        </div>
+      </section>
+
+      <section class="metrics-grid compact-metrics" id="dashboardMetrics"></section>
+      <section class="access-banner hidden" id="accessBanner"></section>
+
+      <section class="admin-main-grid compact-admin-grid">
+        <section class="glass-panel" id="submissionSection">
+          <div class="panel-head compact">
+            <h3>Publish article directly</h3>
+            <span class="panel-meta">Admin-only instant publishing</span>
+          </div>
+
+          <form id="articleForm" class="admin-form compact-admin-form">
+            <div class="form-grid compact-form-grid">
+              <div class="form-group">
+                <label for="title">Article title</label>
+                <input type="text" id="title" name="title" placeholder="Ex: Beginner route for Elden Ring" required />
+              </div>
+
+              <div class="form-group">
+                <label for="game">Game</label>
+                <select id="game" name="game" required></select>
+              </div>
+
+              <div class="form-group">
+                <label for="category">Content type</label>
+                <select id="category" name="category" required>
+                  <option value="">Choose type</option>
+                  <option value="guide">Guide</option>
+                  <option value="review">Review</option>
+                  <option value="build">Build</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="imageUrl">Image URL</label>
+                <input type="url" id="imageUrl" name="imageUrl" placeholder="Optional external image" />
+              </div>
+
+              <div class="form-group">
+                <label for="source">Main source</label>
+                <input type="url" id="source" name="source" placeholder="https://example.com/source" />
+              </div>
+
+              <div class="form-group">
+                <label for="priorityOne">Priority bullet 1</label>
+                <input type="text" id="priorityOne" name="priorityOne" placeholder="Ex: Upgrade your first weapon" />
+              </div>
+
+              <div class="form-group">
+                <label for="priorityTwo">Priority bullet 2</label>
+                <input type="text" id="priorityTwo" name="priorityTwo" placeholder="Ex: Focus on survivability first" />
+              </div>
+
+              <div class="form-group">
+                <label for="priorityThree">Priority bullet 3</label>
+                <input type="text" id="priorityThree" name="priorityThree" placeholder="Ex: Avoid hard bosses too early" />
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="summary">Short summary</label>
+              <textarea id="summary" name="summary" rows="3" placeholder="Write a short teaser for the article..."></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="content">Main content / overview</label>
+              <textarea id="content" name="content" rows="7" placeholder="Write the main approved content here..." required></textarea>
+            </div>
+
+            <div class="admin-actions">
+              <button type="button" class="secondary-btn" id="previewBtn">Preview</button>
+              <button type="reset" class="secondary-btn">Reset</button>
+              <button type="submit" class="primary-btn">Publish article</button>
+            </div>
+          </form>
+
+          <p id="formMessage" class="form-message hidden"></p>
+        </section>
+
+        <aside class="admin-preview-panel">
+          <div class="side-card preview-card compact-preview-card">
+            <h3>Submission Preview</h3>
+            <div class="preview-image" id="previewImage"><span>No image</span></div>
+            <div class="preview-meta">
+              <span class="tag tag-guide" id="previewCategory">Type</span>
+              <span class="likes" id="previewAuthor">Admin publish mode</span>
+            </div>
+            <h4 id="previewTitle">Article title will appear here</h4>
+            <p id="previewGame">Selected game</p>
+            <p id="previewSummary">Summary preview will appear here.</p>
+          </div>
+
+          <div class="side-card compact-side-card">
+            <h4>Publishing rules</h4>
+            <ul class="admin-tips compact-tips">
+              <li>Only Giku can access this page.</li>
+              <li>User submissions appear in the moderation queue.</li>
+              <li>Approved items become visible on game pages immediately.</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel-grid admin-secondary-grid compact-secondary-grid">
+        <section class="glass-panel" id="moderationSection">
+          <div class="panel-head compact">
+            <h3>Moderation queue</h3>
+            <span class="panel-meta">Approve or reject pending user content</span>
+          </div>
+          <div id="moderationQueue" class="moderation-list"></div>
+        </section>
+
+        <section class="glass-panel" id="articleManagementSection">
+          <div class="panel-head compact">
+            <h3>Article management</h3>
+            <span class="panel-meta">Edit and delete existing articles</span>
+          </div>
+          <div class="management-toolbar">
+            <input type="text" id="articleGameSearch" placeholder="Search game..." />
+            <select id="articleGameSelect">
+              <option value="all">All games</option>
+            </select>
+          </div>
+          <div class="article-type-filters" id="articleManagementFilters">
+            <button type="button" class="type-filter active" data-status="all">All</button>
+            <button type="button" class="type-filter" data-status="approved">Approved</button>
+            <button type="button" class="type-filter" data-status="pending">Pending</button>
+            <button type="button" class="type-filter" data-status="rejected">Rejected</button>
+          </div>
+          <div id="articleManagementList" class="moderation-list"></div>
+        </section>
+
+        <section class="glass-panel" id="gameManagementSection">
+          <div class="panel-head compact">
+            <h3>Add new game</h3>
+            <span class="panel-meta">Admin-only publishing</span>
+          </div>
+
+          <form id="gameForm" class="admin-form compact-admin-form">
+            <div class="form-grid compact-form-grid">
+              <div class="form-group">
+                <label for="gameName">Game title</label>
+                <input type="text" id="gameName" placeholder="Ex: The Witcher 3" required />
+              </div>
+              <div class="form-group">
+                <label for="gameSlug">Slug</label>
+                <input type="text" id="gameSlug" placeholder="ex: the-witcher-3" required />
+              </div>
+              <div class="form-group">
+                <label for="gameGenre">Game category / genre</label>
+                <input type="text" id="gameGenre" placeholder="Ex: Open World RPG" required />
+              </div>
+              <div class="form-group">
+                <label for="gameDifficulty">Difficulty</label>
+                <select id="gameDifficulty" required>
+                  <option value="">Choose difficulty</option>
+                  <option value="Easy">Easy</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Medium / Hard">Medium / Hard</option>
+                  <option value="Hard">Hard</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="gamePlatforms">Platforms</label>
+                <input type="text" id="gamePlatforms" placeholder="PC, PS5, Xbox" required />
+              </div>
+              <div class="form-group">
+                <label for="gameImage">Image path</label>
+                <input type="text" id="gameImage" placeholder="assets/images/example.jpg" />
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="gameShortDesc">Short description</label>
+              <textarea id="gameShortDesc" rows="3" placeholder="Short card description..." required></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="gameLongDesc">Long description</label>
+              <textarea id="gameLongDesc" rows="5" placeholder="Long page description..." required></textarea>
+            </div>
+
+            <div class="admin-actions">
+              <button type="button" class="secondary-btn" id="gamePreviewBtn">Preview</button>
+              <button type="reset" class="secondary-btn">Reset</button>
+              <button type="submit" class="primary-btn">Publish game</button>
+            </div>
+          </form>
+
+          <p id="gameFormMessage" class="form-message hidden"></p>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-shell">
+        <div>
+          <h4>GuideHub</h4>
+          <p>Moderation, roles and publishing are handled locally for the prototype.</p>
+        </div>
+        <div>
+          <h4>Pay for our coffee</h4>
+          <p>IBAN demo: <strong>RO77 RNCB 0702 1656 5415 0001</strong></p>
+        </div>
+        <div>
+          <h4>Copyright</h4>
+          <p class="footer-soft">&copy; 2026 GuideHub. Dashboard prototype.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
