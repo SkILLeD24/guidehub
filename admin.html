@@ -189,90 +189,92 @@
           <div id="moderationQueue" class="moderation-list"></div>
         </section>
 
-        <section class="glass-panel" id="articleManagementSection">
-          <div class="panel-head compact">
-            <h3>Article management</h3>
-            <span class="panel-meta">Optimized in dedicated workspace</span>
-          </div>
-          <p>
-            Use the dedicated page for large-scale editing, filtering and cleanup across all articles.
-          </p>
-          <div class="admin-actions">
-            <a class="primary-btn" href="article-management.html">Open article management workspace</a>
-          </div>
-        </section>
-
-        <section class="glass-panel" id="gameManagementSection">
-          <div class="panel-head compact">
-            <h3>Add new game</h3>
-            <span class="panel-meta">Admin-only publishing</span>
-          </div>
-
-          <form id="gameForm" class="admin-form compact-admin-form">
-            <div class="form-grid compact-form-grid">
-              <div class="form-group">
-                <label for="gameName">Game title</label>
-                <input type="text" id="gameName" placeholder="Ex: The Witcher 3" required />
-              </div>
-              <div class="form-group">
-                <label for="gameSlug">Slug</label>
-                <input type="text" id="gameSlug" placeholder="ex: the-witcher-3" required />
-              </div>
-              <div class="form-group">
-                <label for="gameGenre">Game category / genre</label>
-                <input type="text" id="gameGenre" placeholder="Ex: Open World RPG" required />
-              </div>
-              <div class="form-group">
-                <label for="gameDifficulty">Difficulty</label>
-                <select id="gameDifficulty" required>
-                  <option value="">Choose difficulty</option>
-                  <option value="Easy">Easy</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Medium / Hard">Medium / Hard</option>
-                  <option value="Hard">Hard</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="gamePlatforms">Platforms</label>
-                <input type="text" id="gamePlatforms" placeholder="PC, PS5, Xbox" required />
-              </div>
-              <div class="form-group">
-                <label for="gameStudio">Studio</label>
-                <input type="text" id="gameStudio" placeholder="Ex: Remedy Entertainment" />
-              </div>
-              <div class="form-group">
-                <label for="gameYear">Release year</label>
-                <input type="number" id="gameYear" placeholder="2024" min="1970" max="2100" />
-              </div>
-              <div class="form-group">
-                <label for="gameOfficialUrl">Official URL</label>
-                <input type="url" id="gameOfficialUrl" placeholder="https://example.com" />
-              </div>
-              <div class="form-group">
-                <label for="gameImage">Image path</label>
-                <input type="text" id="gameImage" placeholder="assets/images/example.jpg" />
-              </div>
+        <div class="admin-right-stack">
+          <section class="glass-panel" id="articleManagementSection">
+            <div class="panel-head compact">
+              <h3>Article management</h3>
+              <span class="panel-meta">Optimized in dedicated workspace</span>
             </div>
-
-            <div class="form-group full-width">
-              <label for="gameShortDesc">Short description</label>
-              <textarea id="gameShortDesc" rows="3" placeholder="Short card description..." required></textarea>
-            </div>
-
-            <div class="form-group full-width">
-              <label for="gameLongDesc">Long description</label>
-              <textarea id="gameLongDesc" rows="5" placeholder="Long page description..." required></textarea>
-            </div>
-
+            <p>
+              Use the dedicated page for large-scale editing, filtering and cleanup across all articles.
+            </p>
             <div class="admin-actions">
-              <button type="button" class="secondary-btn" id="gamePreviewBtn">Preview</button>
-              <button type="reset" class="secondary-btn">Reset</button>
-              <button type="submit" class="primary-btn">Publish game</button>
+              <a class="primary-btn" href="article-management.html">Open article management workspace</a>
             </div>
-          </form>
+          </section>
 
-          <p id="gameFormMessage" class="form-message hidden"></p>
-        </section>
+          <section class="glass-panel" id="gameManagementSection">
+            <div class="panel-head compact">
+              <h3>Add new game</h3>
+              <span class="panel-meta">Admin-only publishing</span>
+            </div>
+
+            <form id="gameForm" class="admin-form compact-admin-form">
+              <div class="form-grid compact-form-grid">
+                <div class="form-group">
+                  <label for="gameName">Game title</label>
+                  <input type="text" id="gameName" placeholder="Ex: The Witcher 3" required />
+                </div>
+                <div class="form-group">
+                  <label for="gameSlug">Slug</label>
+                  <input type="text" id="gameSlug" placeholder="ex: the-witcher-3" required />
+                </div>
+                <div class="form-group">
+                  <label for="gameGenre">Game category / genre</label>
+                  <input type="text" id="gameGenre" placeholder="Ex: Open World RPG" required />
+                </div>
+                <div class="form-group">
+                  <label for="gameDifficulty">Difficulty</label>
+                  <select id="gameDifficulty" required>
+                    <option value="">Choose difficulty</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Medium / Hard">Medium / Hard</option>
+                    <option value="Hard">Hard</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="gamePlatforms">Platforms</label>
+                  <input type="text" id="gamePlatforms" placeholder="PC, PS5, Xbox" required />
+                </div>
+                <div class="form-group">
+                  <label for="gameStudio">Studio</label>
+                  <input type="text" id="gameStudio" placeholder="Ex: Remedy Entertainment" />
+                </div>
+                <div class="form-group">
+                  <label for="gameYear">Release year</label>
+                  <input type="number" id="gameYear" placeholder="2024" min="1970" max="2100" />
+                </div>
+                <div class="form-group">
+                  <label for="gameOfficialUrl">Official URL</label>
+                  <input type="url" id="gameOfficialUrl" placeholder="https://example.com" />
+                </div>
+                <div class="form-group">
+                  <label for="gameImage">Image path</label>
+                  <input type="text" id="gameImage" placeholder="assets/images/example.jpg" />
+                </div>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="gameShortDesc">Short description</label>
+                <textarea id="gameShortDesc" rows="3" placeholder="Short card description..." required></textarea>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="gameLongDesc">Long description</label>
+                <textarea id="gameLongDesc" rows="5" placeholder="Long page description..." required></textarea>
+              </div>
+
+              <div class="admin-actions">
+                <button type="button" class="secondary-btn" id="gamePreviewBtn">Preview</button>
+                <button type="reset" class="secondary-btn">Reset</button>
+                <button type="submit" class="primary-btn">Publish game</button>
+              </div>
+            </form>
+
+            <p id="gameFormMessage" class="form-message hidden"></p>
+          </section>
+        </div>
       </section>
     </main>
 

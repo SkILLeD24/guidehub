@@ -632,6 +632,16 @@ textarea {
   margin-top: 34px;
 }
 
+.admin-secondary-grid {
+  align-items: start;
+}
+
+.admin-right-stack {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
 .glass-panel,
 .content-panel,
 .side-card,
