@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GuideHub | Admin Dashboard</title>
+    <link rel="icon" type="image/png" href="assets/images/guidehub-logo.png" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body data-page="admin">
@@ -191,21 +192,14 @@
         <section class="glass-panel" id="articleManagementSection">
           <div class="panel-head compact">
             <h3>Article management</h3>
-            <span class="panel-meta">Edit and delete existing articles</span>
+            <span class="panel-meta">Optimized in dedicated workspace</span>
           </div>
-          <div class="management-toolbar">
-            <input type="text" id="articleGameSearch" placeholder="Search game..." />
-            <select id="articleGameSelect">
-              <option value="all">All games</option>
-            </select>
+          <p>
+            Use the dedicated page for large-scale editing, filtering and cleanup across all articles.
+          </p>
+          <div class="admin-actions">
+            <a class="primary-btn" href="article-management.html">Open article management workspace</a>
           </div>
-          <div class="article-type-filters" id="articleManagementFilters">
-            <button type="button" class="type-filter active" data-status="all">All</button>
-            <button type="button" class="type-filter" data-status="approved">Approved</button>
-            <button type="button" class="type-filter" data-status="pending">Pending</button>
-            <button type="button" class="type-filter" data-status="rejected">Rejected</button>
-          </div>
-          <div id="articleManagementList" class="moderation-list"></div>
         </section>
 
         <section class="glass-panel" id="gameManagementSection">
@@ -291,6 +285,7 @@
         <div>
           <h4>Pay for our coffee</h4>
           <p>IBAN demo: <strong>RO77 RNCB 0702 1656 5415 0001</strong></p>
+          <p class="footer-soft">Laca Marian-George</p>
         </div>
         <div>
           <h4>Copyright</h4>

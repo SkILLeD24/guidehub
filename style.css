@@ -2178,7 +2178,8 @@ textarea {
   gap: 14px;
 }
 
-#articleManagementList .moderation-card {
+#articleManagementList .moderation-card,
+#modalArticleList .moderation-card {
   padding: 16px;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -2189,7 +2190,10 @@ textarea {
 
 #articleManagementList .edit-title,
 #articleManagementList .edit-summary,
-#articleManagementList .edit-content {
+#articleManagementList .edit-content,
+#modalArticleList .edit-title,
+#modalArticleList .edit-summary,
+#modalArticleList .edit-content {
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(7, 10, 24, 0.85);
@@ -2198,27 +2202,34 @@ textarea {
   padding: 10px 12px;
 }
 
-#articleManagementList .edit-title {
+#articleManagementList .edit-title,
+#modalArticleList .edit-title {
   font-weight: 700;
   font-size: 20px;
 }
 
 #articleManagementList .edit-summary,
-#articleManagementList .edit-content {
+#articleManagementList .edit-content,
+#modalArticleList .edit-summary,
+#modalArticleList .edit-content {
   resize: vertical;
   line-height: 1.5;
 }
 
-#articleManagementList .queue-actions {
+#articleManagementList .queue-actions,
+#modalArticleList .queue-actions {
   justify-content: flex-start;
 }
 
 #articleManagementList .save-edit-btn,
-#articleManagementList .delete-article-btn {
+#articleManagementList .delete-article-btn,
+#modalArticleList .save-edit-btn,
+#modalArticleList .delete-article-btn {
   min-width: 96px;
 }
 
-#articleManagementList .delete-article-btn {
+#articleManagementList .delete-article-btn,
+#modalArticleList .delete-article-btn {
   border-color: rgba(255, 109, 135, 0.4);
 }
 
@@ -2257,6 +2268,8 @@ textarea {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  margin-top: auto;
+  padding-top: 6px;
 }
 
 .card-action-row .view-btn {
@@ -2280,4 +2293,89 @@ textarea {
   color: #fff;
   border-radius: 12px;
   padding: 10px 12px;
+}
+
+.back-to-top {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 120;
+  border: 1px solid rgba(88, 212, 255, 0.45);
+  background: linear-gradient(135deg, rgba(88, 212, 255, 0.92), rgba(156, 101, 255, 0.92));
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 10px 16px;
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.admin-game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.admin-game-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(6, 11, 30, 0.8);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-game-card h4 {
+  margin: 0 0 6px;
+}
+
+.admin-game-card p {
+  margin: 0 0 8px;
+  color: var(--text-soft);
+}
+
+.admin-game-card .open-game-articles-btn {
+  width: 100%;
+}
+
+.article-section-inactive {
+  opacity: 0.9;
+}
+
+.overlay-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 14, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.overlay-modal.hidden {
+  display: none;
+}
+
+.overlay-dialog {
+  width: min(1200px, 96vw);
+  max-height: 88vh;
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  background: rgba(8, 12, 34, 0.96);
+  padding: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
 }

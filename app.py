@@ -107,6 +107,16 @@ def admin_page():
     return app.send_static_file("admin.html")
 
 
+@app.route("/article-management.html")
+def article_management_page():
+    user = get_current_user()
+    if not user:
+        return redirect("/index.html")
+    if user["role"] != "admin":
+        return redirect("/submit.html")
+    return app.send_static_file("article-management.html")
+
+
 @app.route("/api/auth/me", methods=["GET"])
 def auth_me():
     user = get_current_user()

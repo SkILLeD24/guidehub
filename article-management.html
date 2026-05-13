@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GuideHub | Article Management</title>
+    <link rel="icon" type="image/png" href="assets/images/guidehub-logo.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="article-management">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <div class="stars"></div>
+
+    <header class="site-header sticky-header">
+      <div class="shell header-shell">
+        <a class="brand" href="index.html">
+          <div class="brand-icon">
+            <img src="assets/images/guidehub-logo.png" alt="GuideHub logo" />
+          </div>
+          <div class="brand-text">
+            <h1>GUIDEHUB</h1>
+            <p>Game discovery, curated content and community publishing</p>
+          </div>
+        </a>
+
+        <nav class="main-nav main-nav-row">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="admin.html" class="nav-link">Admin</a>
+          <a href="article-management.html" class="nav-link active">Article Management</a>
+        </nav>
+
+        <div class="header-tools">
+          <div class="header-account">
+            <button id="accountButton" class="header-account-button">Cont</button>
+            <button id="logoutButton" class="header-account-button hidden">Logout</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="shell page page-admin">
+      <section class="dashboard-hero compact-dashboard-hero">
+        <div>
+          <span class="eyebrow">GuideHub admin tools</span>
+          <h2>Article management workspace</h2>
+          <p>Filter by game and status, then edit or delete articles in one focused page.</p>
+        </div>
+        <div class="dashboard-status">
+          <div class="status-pill" id="adminRolePill">Current role: admin</div>
+          <div class="status-note">Only admins can access this page.</div>
+        </div>
+      </section>
+
+      <section class="access-banner hidden" id="accessBanner"></section>
+      <section class="metrics-grid compact-metrics" id="dashboardMetrics"></section>
+
+      <section class="glass-panel" id="gamePickerSection">
+        <div class="panel-head compact">
+          <h3>Games</h3>
+          <span class="panel-meta">Select one game, then manage its articles</span>
+        </div>
+        <div id="adminGameList" class="admin-game-grid"></div>
+      </section>
+
+    </main>
+
+    <div id="articleModal" class="overlay-modal hidden" aria-hidden="true">
+      <div class="overlay-dialog">
+        <div class="panel-head compact">
+          <h3 id="articleModalTitle">Articles</h3>
+          <button type="button" id="closeArticleModal" class="secondary-btn small-btn">Close</button>
+        </div>
+        <div class="management-toolbar">
+          <input type="text" id="modalArticleSearch" placeholder="Search article title, author, category..." />
+          <select id="modalArticleStatus">
+            <option value="all">All statuses</option>
+            <option value="approved">Approved</option>
+            <option value="pending">Pending</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div id="modalArticleList" class="moderation-list"></div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="shell footer-shell">
+        <div>
+          <h4>GuideHub</h4>
+          <p>Moderation, roles and publishing are handled locally for the prototype.</p>
+        </div>
+        <div>
+          <h4>Pay for our coffee</h4>
+          <p>IBAN demo: <strong>RO77 RNCB 0702 1656 5415 0001</strong></p>
+          <p class="footer-soft">Laca Marian-George</p>
+        </div>
+        <div>
+          <h4>Copyright</h4>
+          <p class="footer-soft">&copy; 2026 GuideHub. Dashboard prototype.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

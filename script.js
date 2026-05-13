@@ -42,6 +42,26 @@ function dashboardText(role) {
   return role === "admin" ? "Open dashboard" : "Submit content";
 }
 
+function initBackToTopButton() {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "back-to-top";
+  button.setAttribute("aria-label", "Back to top");
+  button.textContent = "Back to top";
+  document.body.appendChild(button);
+
+  const toggleVisibility = () => {
+    button.classList.toggle("visible", window.scrollY > 420);
+  };
+
+  window.addEventListener("scroll", toggleVisibility, { passive: true });
+  toggleVisibility();
+
+  button.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
+
 async function refreshSessionUI() {
   const user = await getCurrentUser();
   const accountButton = document.getElementById("accountButton");
@@ -437,7 +457,10 @@ async function renderAdminPage(user) {
   let selectedGameSlug = "all";
 
   adminRolePill.textContent = `Current role: ${user.role}`;
-  document.getElementById("adminRoleDescription").textContent = user.role === "admin" ? "Admin mode active." : "Access restricted.";
+  const adminRoleDescription = document.getElementById("adminRoleDescription");
+  if (adminRoleDescription) {
+    adminRoleDescription.textContent = user.role === "admin" ? "Admin mode active." : "Access restricted.";
+  }
 
   if (user.role !== "admin") {
     accessBanner.textContent = "Acces interzis. Doar admin poate folosi acest dashboard.";
@@ -574,6 +597,103 @@ async function renderAdminPage(user) {
   await loadArticleManagement(articleManagementList, currentManagementStatus, selectedGameSlug, articleGameSearch?.value || "");
 }
 
+async function renderArticleManagementPage(user) {
+  const gameCards = document.getElementById("adminGameList");
+  if (!gameCards) return;
+
+  const rolePill = document.getElementById("adminRolePill");
+  const accessBanner = document.getElementById("accessBanner");
+  const dashboardMetrics = document.getElementById("dashboardMetrics");
+  const modal = document.getElementById("articleModal");
+  const modalTitle = document.getElementById("articleModalTitle");
+  const modalList = document.getElementById("modalArticleList");
+  const modalSearch = document.getElementById("modalArticleSearch");
+  const modalStatus = document.getElementById("modalArticleStatus");
+  const closeModal = document.getElementById("closeArticleModal");
+
+  let currentStatus = "all";
+  let currentGameSlug = "";
+
+  if (rolePill) rolePill.textContent = `Current role: ${user.role}`;
+
+  if (user.role !== "admin") {
+    if (accessBanner) {
+      accessBanner.textContent = "Acces interzis. Doar admin poate folosi acest workspace.";
+      accessBanner.classList.remove("hidden");
+    }
+    return;
+  }
+
+  const summary = await api("/api/admin/summary");
+  if (dashboardMetrics) {
+    dashboardMetrics.innerHTML = `
+      <div class="metric-card"><strong>${summary.games}</strong><span>Games</span></div>
+      <div class="metric-card"><strong>${summary.approved}</strong><span>Approved</span></div>
+      <div class="metric-card"><strong>${summary.pending}</strong><span>Pending</span></div>
+      <div class="metric-card"><strong>${summary.users}</strong><span>Users</span></div>
+    `;
+  }
+
+  const games = await api("/api/games");
+
+  async function refreshModalList() {
+    if (!currentGameSlug || !modalList) return;
+    await loadArticleManagement(modalList, currentStatus, currentGameSlug, modalSearch?.value || "");
+  }
+
+  function openModalForGame(slug, title) {
+    currentGameSlug = slug;
+    currentStatus = "all";
+    if (modalStatus) modalStatus.value = "all";
+    if (modalSearch) modalSearch.value = "";
+    if (modalTitle) modalTitle.textContent = `Articles - ${title}`;
+    modal?.classList.remove("hidden");
+    modal?.setAttribute("aria-hidden", "false");
+    refreshModalList();
+  }
+
+  function closeModalPanel() {
+    modal?.classList.add("hidden");
+    modal?.setAttribute("aria-hidden", "true");
+    currentGameSlug = "";
+  }
+
+  closeModal?.addEventListener("click", closeModalPanel);
+  modal?.addEventListener("click", (event) => {
+    if (event.target === modal) closeModalPanel();
+  });
+
+  modalSearch?.addEventListener("input", async () => {
+    await refreshModalList();
+  });
+
+  modalStatus?.addEventListener("change", async () => {
+    currentStatus = modalStatus.value;
+    await refreshModalList();
+  });
+
+  if (gameCards) {
+    gameCards.innerHTML = games.map((game) => `
+      <article class="admin-game-card">
+        <div>
+          <h4>${escapeHtml(game.title)}</h4>
+          <p>${escapeHtml(game.genre || "General")} | ${escapeHtml(game.difficulty || "-")}</p>
+          <span class="likes">${game.approved_articles || 0} articles</span>
+        </div>
+        <button type="button" class="primary-btn small-btn open-game-articles-btn" data-slug="${escapeHtml(game.slug)}" data-title="${escapeHtml(game.title)}">
+          Vezi articolele
+        </button>
+      </article>
+    `).join("");
+
+    gameCards.querySelectorAll(".open-game-articles-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        openModalForGame(button.dataset.slug, button.dataset.title);
+      });
+    });
+  }
+}
+
 async function loadPending(container) {
   if (!container) return;
   const items = await api("/api/articles/pending");
@@ -660,6 +780,7 @@ async function loadArticleManagement(container, status = "all", gameSlug = "all"
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
+    initBackToTopButton();
     const user = await refreshSessionUI();
     initLoginModal();
     initRegisterForm();
@@ -667,6 +788,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await renderGamePage(user);
     await renderSubmitPage(user);
     await renderAdminPage(user);
+    await renderArticleManagementPage(user);
   } catch (error) {
     console.error(error);
   }
