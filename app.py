@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from pathlib import Path
+from urllib.parse import urlparse
 from flask import Flask, jsonify, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -10,7 +12,11 @@ BASE_DIR = Path(__file__).resolve().parent
 DB_NAME = BASE_DIR / "guidehub.db"
 
 app = Flask(__name__, static_folder=".", static_url_path="")
-app.secret_key = "guidehub-secret-key-change-me"
+app.secret_key = os.getenv("GUIDEHUB_SECRET_KEY", "guidehub-secret-key-change-me")
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+)
 
 
 def get_connection() -> sqlite3.Connection:
@@ -33,6 +39,13 @@ def parse_platforms(raw):
         return json.loads(raw)
     except Exception:
         return [item.strip() for item in str(raw).split(",") if item.strip()]
+
+
+def is_valid_http_url(value: str) -> bool:
+    if not value:
+        return False
+    parsed = urlparse(value)
+    return parsed.scheme in ("http", "https") and bool(parsed.netloc)
 
 
 def get_current_user():
@@ -193,6 +206,12 @@ def admin_summary():
 
 @app.route("/api/articles/latest", methods=["GET"])
 def latest_articles():
+    try:
+        limit = int(request.args.get("limit", 6))
+    except ValueError:
+        limit = 6
+    limit = max(1, min(limit, 20))
+
     conn = get_connection()
     rows = conn.execute(
         """
@@ -208,8 +227,10 @@ def latest_articles():
         JOIN users u ON u.id = a.user_id
         WHERE a.status = 'approved' AND c.name NOT IN ('Codes', 'Discount Coupons')
         ORDER BY a.created_at DESC, a.id DESC
-        LIMIT 6
+        LIMIT ?
         """
+        ,
+        (limit,)
     ).fetchall()
     conn.close()
     return jsonify([dict(r) for r in rows]), 200
@@ -268,7 +289,10 @@ def create_game():
     genre = data.get("genre", "").strip()
     difficulty = data.get("difficulty", "").strip() or "Medium"
     studio = data.get("studio", "").strip() or "Independent Studio"
-    release_year = int(data.get("release_year") or 2026)
+    try:
+        release_year = int(data.get("release_year") or 2026)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Release year must be a number"}), 400
     platforms = data.get("platforms") or []
     if isinstance(platforms, str):
         platforms = [p.strip() for p in platforms.split(",") if p.strip()]
@@ -276,6 +300,10 @@ def create_game():
 
     if not title or not slug or not description or not genre:
         return jsonify({"error": "Title, slug, description and genre are required"}), 400
+    if release_year < 1970 or release_year > 2100:
+        return jsonify({"error": "Release year is out of range"}), 400
+    if official_url != "#" and not is_valid_http_url(official_url):
+        return jsonify({"error": "Official URL must be valid http/https"}), 400
 
     conn = get_connection()
     exists = conn.execute("SELECT id FROM games WHERE slug = ?", (slug,)).fetchone()
@@ -314,6 +342,8 @@ def submit_article():
 
     if not game_slug or not category_name or not title or not content:
         return jsonify({"error": "Missing required fields"}), 400
+    if source_url and not is_valid_http_url(source_url):
+        return jsonify({"error": "Source URL must be valid http/https"}), 400
 
     conn = get_connection()
     game = conn.execute("SELECT id FROM games WHERE slug = ?", (game_slug,)).fetchone()
@@ -385,8 +415,30 @@ def admin_articles():
     if not require_admin():
         return jsonify({"error": "Admin access required"}), 403
     status = request.args.get("status", "all").strip().lower()
-    where = "" if status == "all" else "WHERE a.status = ?"
-    params = () if status == "all" else (status,)
+    game_slug = request.args.get("game", "all").strip().lower()
+    query = request.args.get("q", "").strip().lower()
+    try:
+        page = int(request.args.get("page", 1))
+        limit = int(request.args.get("limit", 30))
+    except ValueError:
+        page, limit = 1, 30
+    page = max(1, page)
+    limit = max(1, min(limit, 100))
+    offset = (page - 1) * limit
+
+    filters = []
+    params = []
+    if status != "all":
+        filters.append("a.status = ?")
+        params.append(status)
+    if game_slug != "all":
+        filters.append("g.slug = ?")
+        params.append(game_slug)
+    if query:
+        filters.append("LOWER(a.title || ' ' || a.summary || ' ' || g.title || ' ' || c.name || ' ' || u.username) LIKE ?")
+        params.append(f"%{query}%")
+
+    where = f"WHERE {' AND '.join(filters)}" if filters else ""
     conn = get_connection()
     rows = conn.execute(
         f"""
@@ -398,8 +450,9 @@ def admin_articles():
         JOIN users u ON u.id = a.user_id
         {where}
         ORDER BY a.created_at DESC, a.id DESC
+        LIMIT ? OFFSET ?
         """,
-        params
+        (*params, limit, offset)
     ).fetchall()
     conn.close()
     return jsonify([dict(r) for r in rows]), 200

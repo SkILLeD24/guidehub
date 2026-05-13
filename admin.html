@@ -102,9 +102,10 @@
                 <label for="category">Content type</label>
                 <select id="category" name="category" required>
                   <option value="">Choose type</option>
-                  <option value="guide">Guide</option>
-                  <option value="review">Review</option>
-                  <option value="build">Build</option>
+                  <option value="Guide">Guide</option>
+                  <option value="Review">Review</option>
+                  <option value="Build">Build</option>
+                  <option value="Tips & Tricks">Tips & Tricks</option>
                 </select>
               </div>
 
@@ -240,6 +241,18 @@
               <div class="form-group">
                 <label for="gamePlatforms">Platforms</label>
                 <input type="text" id="gamePlatforms" placeholder="PC, PS5, Xbox" required />
+              </div>
+              <div class="form-group">
+                <label for="gameStudio">Studio</label>
+                <input type="text" id="gameStudio" placeholder="Ex: Remedy Entertainment" />
+              </div>
+              <div class="form-group">
+                <label for="gameYear">Release year</label>
+                <input type="number" id="gameYear" placeholder="2024" min="1970" max="2100" />
+              </div>
+              <div class="form-group">
+                <label for="gameOfficialUrl">Official URL</label>
+                <input type="url" id="gameOfficialUrl" placeholder="https://example.com" />
               </div>
               <div class="form-group">
                 <label for="gameImage">Image path</label>

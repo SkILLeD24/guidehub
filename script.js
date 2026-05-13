@@ -148,7 +148,14 @@ function renderPlatforms(platforms) {
 async function renderLatestArticles() {
   const container = document.getElementById("latestArticles");
   if (!container) return;
-  const items = await api("/api/articles/latest");
+  container.innerHTML = "<p>Loading latest articles...</p>";
+  let items = [];
+  try {
+    items = await api("/api/articles/latest?limit=8");
+  } catch (_error) {
+    container.innerHTML = "<p>Could not load latest approved articles right now.</p>";
+    return;
+  }
   container.innerHTML = items.length
     ? items.map((item) => `
       <article class="feed-item compact-feed-item">
@@ -169,6 +176,7 @@ async function renderLatestArticles() {
 async function renderHomePage() {
   const cardsGrid = document.getElementById("cardsGrid");
   if (!cardsGrid) return;
+  cardsGrid.innerHTML = "<p>Loading games...</p>";
   const games = await api("/api/games");
   const genreFilters = document.getElementById("genreFilters");
   const searchInput = document.getElementById("searchInput");
@@ -504,16 +512,34 @@ async function renderAdminPage(user) {
   const gameFormMessage = document.getElementById("gameFormMessage");
   gameForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const slugRaw = document.getElementById("gameSlug").value.trim().toLowerCase();
+    if (!/^[a-z0-9-]+$/.test(slugRaw)) {
+      if (gameFormMessage) {
+        gameFormMessage.textContent = "Slug must contain only lowercase letters, numbers and dashes.";
+        gameFormMessage.classList.remove("hidden");
+      }
+      return;
+    }
+    const yearRaw = Number(document.getElementById("gameYear")?.value || 2026);
+    if (!Number.isInteger(yearRaw) || yearRaw < 1970 || yearRaw > 2100) {
+      if (gameFormMessage) {
+        gameFormMessage.textContent = "Release year must be an integer between 1970 and 2100.";
+        gameFormMessage.classList.remove("hidden");
+      }
+      return;
+    }
+    const shortDesc = document.getElementById("gameShortDesc")?.value.trim() || "";
+    const longDesc = document.getElementById("gameLongDesc")?.value.trim() || "";
     const payload = {
       title: document.getElementById("gameName").value.trim(),
-      slug: document.getElementById("gameSlug").value.trim(),
+      slug: slugRaw,
       genre: document.getElementById("gameGenre").value.trim(),
       difficulty: document.getElementById("gameDifficulty").value.trim(),
-      description: (document.getElementById("gameShortDesc") || document.getElementById("gameLongDesc"))?.value.trim() || "",
+      description: [shortDesc, longDesc].filter(Boolean).join("\n\n"),
       image_url: document.getElementById("gameImage").value.trim(),
       platforms: (document.getElementById("gamePlatforms")?.value || "").trim(),
       studio: (document.getElementById("gameStudio")?.value || "Independent Studio").trim(),
-      release_year: (document.getElementById("gameYear")?.value || 2026),
+      release_year: yearRaw,
       official_url: (document.getElementById("gameOfficialUrl")?.value || "#").trim(),
     };
     try {
@@ -585,11 +611,14 @@ async function loadPending(container) {
 
 async function loadArticleManagement(container, status = "all", gameSlug = "all", search = "") {
   if (!container) return;
-  const query = status !== "all" ? `?status=${encodeURIComponent(status)}` : "";
-  let items = await api(`/api/articles/admin${query}`);
-  if (gameSlug !== "all") items = items.filter((item) => item.game_slug === gameSlug);
-  const q = (search || "").trim().toLowerCase();
-  if (q) items = items.filter((item) => `${item.title} ${item.game} ${item.author} ${item.category}`.toLowerCase().includes(q));
+  container.innerHTML = "<p>Loading articles...</p>";
+  const params = new URLSearchParams();
+  if (status !== "all") params.set("status", status);
+  if (gameSlug !== "all") params.set("game", gameSlug);
+  if ((search || "").trim()) params.set("q", search.trim());
+  params.set("limit", "100");
+  const suffix = params.toString() ? `?${params.toString()}` : "";
+  const items = await api(`/api/articles/admin${suffix}`);
 
   container.innerHTML = items.length ? items.map((item) => `
     <article class="moderation-card" data-id="${item.id}">
