@@ -2346,6 +2346,19 @@ textarea {
   gap: 12px;
 }
 
+.admin-game-cover {
+  height: 116px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.admin-game-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .admin-game-card h4 {
   margin: 0 0 6px;
 }

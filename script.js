@@ -496,12 +496,33 @@ async function renderAdminPage(user) {
   const articleForm = document.getElementById("articleForm");
   const previewBtn = document.getElementById("previewBtn");
   const formMessage = document.getElementById("formMessage");
+  const gameSelect = document.getElementById("game");
+  const imageUrlInput = document.getElementById("imageUrl");
+  const previewImage = document.getElementById("previewImage");
+
+  function getSelectedGameImage() {
+    const slug = gameSelect?.value;
+    const game = games.find((item) => item.slug === slug);
+    return game?.image_url || FALLBACK_IMAGE;
+  }
+
+  function updatePreviewImage() {
+    if (!previewImage) return;
+    const custom = imageUrlInput?.value.trim();
+    const finalImage = custom || getSelectedGameImage();
+    previewImage.innerHTML = `<img src="${escapeHtml(finalImage)}" alt="Selected game preview" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'" />`;
+  }
+
+  updatePreviewImage();
+  gameSelect?.addEventListener("change", updatePreviewImage);
+  imageUrlInput?.addEventListener("input", updatePreviewImage);
 
   previewBtn?.addEventListener("click", () => {
     document.getElementById("previewTitle").textContent = document.getElementById("title").value.trim() || "Article title will appear here";
     document.getElementById("previewGame").textContent = document.getElementById("game").selectedOptions[0]?.textContent || "Selected game";
     document.getElementById("previewSummary").textContent = document.getElementById("summary").value.trim() || "Summary preview will appear here.";
     document.getElementById("previewCategory").textContent = document.getElementById("category").value || "Type";
+    updatePreviewImage();
   });
 
   articleForm?.addEventListener("submit", async (event) => {
@@ -523,6 +544,7 @@ async function renderAdminPage(user) {
       formMessage.textContent = `Published successfully. Status: ${result.status}`;
       formMessage.classList.remove("hidden");
       articleForm.reset();
+      updatePreviewImage();
       await loadPending(moderationQueue);
       await loadArticleManagement(articleManagementList, currentManagementStatus, selectedGameSlug, articleGameSearch?.value || "");
     } catch (error) {
@@ -675,6 +697,9 @@ async function renderArticleManagementPage(user) {
   if (gameCards) {
     gameCards.innerHTML = games.map((game) => `
       <article class="admin-game-card">
+        <div class="admin-game-cover">
+          <img src="${escapeHtml(game.image_url || FALLBACK_IMAGE)}" alt="${escapeHtml(game.title)}" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'" />
+        </div>
         <div>
           <h4>${escapeHtml(game.title)}</h4>
           <p>${escapeHtml(game.genre || "General")} | ${escapeHtml(game.difficulty || "-")}</p>
