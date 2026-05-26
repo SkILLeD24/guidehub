@@ -1,6 +1,19 @@
 const CARD_CONTENT_TYPES = ["Guide", "Review", "Build", "Tips & Tricks"];
 const FALLBACK_IMAGE = "assets/images/guidehub-logo.png";
 
+function normalizeArticleCategory(value) {
+  const raw = String(value || "").trim().toLowerCase();
+  if (!raw) return "";
+  const categoryMap = {
+    guide: "Guide",
+    review: "Review",
+    build: "Build",
+    "tips & tricks": "Tips & Tricks",
+    tips: "Tips & Tricks",
+  };
+  return categoryMap[raw] || value;
+}
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -367,9 +380,10 @@ async function renderGamePage(user) {
 
 async function fillGameSelect(selectId) {
   const select = document.getElementById(selectId);
-  if (!select) return;
+  if (!select) return [];
   const games = await api("/api/games");
   select.innerHTML = games.map((g) => `<option value="${escapeHtml(g.slug)}">${escapeHtml(g.title)}</option>`).join("");
+  return games;
 }
 
 async function renderSubmitPage(user) {
@@ -397,14 +411,44 @@ async function renderSubmitPage(user) {
     submitSection.classList.remove("hidden");
   }
 
-  await fillGameSelect("game");
+  const games = await fillGameSelect("game");
+  const gameSelect = document.getElementById("game");
+  const imageUrlInput = document.getElementById("imageUrl");
+  const previewImage = document.getElementById("previewImage");
+  const previewBtn = document.getElementById("previewBtn");
+
+  function getSelectedGameImage() {
+    const slug = gameSelect?.value;
+    const game = games.find((item) => item.slug === slug);
+    return game?.image_url || FALLBACK_IMAGE;
+  }
+
+  function updatePreviewImage() {
+    if (!previewImage) return;
+    const custom = imageUrlInput?.value.trim();
+    const finalImage = custom || getSelectedGameImage();
+    previewImage.innerHTML = `<img src="${escapeHtml(finalImage)}" alt="Selected game preview" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'" />`;
+  }
+
+  updatePreviewImage();
+  gameSelect?.addEventListener("change", updatePreviewImage);
+  imageUrlInput?.addEventListener("input", updatePreviewImage);
+
+  previewBtn?.addEventListener("click", () => {
+    document.getElementById("previewTitle").textContent = document.getElementById("title").value.trim() || "Article title will appear here";
+    document.getElementById("previewGame").textContent = document.getElementById("game").selectedOptions[0]?.textContent || "Selected game";
+    document.getElementById("previewSummary").textContent = document.getElementById("summary").value.trim() || "Summary preview will appear here.";
+    const selectedCategory = normalizeArticleCategory(document.getElementById("category").value);
+    document.getElementById("previewCategory").textContent = selectedCategory || "Type";
+    updatePreviewImage();
+  });
 
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const payload = {
       title: document.getElementById("title").value.trim(),
       gameSlug: document.getElementById("game").value,
-      category: document.getElementById("category").value,
+      category: normalizeArticleCategory(document.getElementById("category").value),
       summary: document.getElementById("summary").value.trim(),
       content: document.getElementById("content").value.trim(),
       sourceTitle: document.getElementById("sourceTitle") ? document.getElementById("sourceTitle").value.trim() : "Submitted source",
@@ -419,6 +463,7 @@ async function renderSubmitPage(user) {
       formMessage.textContent = `Articol trimis cu succes. Status: ${result.status}`;
       formMessage.classList.remove("hidden");
       form.reset();
+      updatePreviewImage();
       await loadMySubmissions(feed);
     } catch (error) {
       formMessage.textContent = error.message;
@@ -521,7 +566,8 @@ async function renderAdminPage(user) {
     document.getElementById("previewTitle").textContent = document.getElementById("title").value.trim() || "Article title will appear here";
     document.getElementById("previewGame").textContent = document.getElementById("game").selectedOptions[0]?.textContent || "Selected game";
     document.getElementById("previewSummary").textContent = document.getElementById("summary").value.trim() || "Summary preview will appear here.";
-    document.getElementById("previewCategory").textContent = document.getElementById("category").value || "Type";
+    const selectedCategory = normalizeArticleCategory(document.getElementById("category").value);
+    document.getElementById("previewCategory").textContent = selectedCategory || "Type";
     updatePreviewImage();
   });
 
@@ -534,7 +580,7 @@ async function renderAdminPage(user) {
         body: JSON.stringify({
           title: document.getElementById("title").value.trim(),
           gameSlug: document.getElementById("game").value,
-          category: document.getElementById("category").value,
+          category: normalizeArticleCategory(document.getElementById("category").value),
           summary: document.getElementById("summary").value.trim(),
           content: document.getElementById("content").value.trim(),
           sourceTitle: document.getElementById("sourceTitle") ? document.getElementById("sourceTitle").value.trim() : "Admin source",
